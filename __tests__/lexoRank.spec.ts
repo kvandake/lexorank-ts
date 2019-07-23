@@ -1,4 +1,4 @@
-import { LexoRank } from '../src/lexoRank';
+import { LexoRank } from '../src/index';
 
 describe('LexoRank', () => {
 
