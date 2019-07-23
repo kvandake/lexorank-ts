@@ -63,6 +63,9 @@ const any2LexoRank = any1LexoRank.genNext().genNext();
 const betweenLexoRank = any1LexoRank.between(any2LexoRank);
 ```
 
+## Related projects
+- [LexoRank on C#](https://github.com/kvandake/lexorank-dotnet)
+
 ## Licence
 MIT
 
