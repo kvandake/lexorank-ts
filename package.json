@@ -4,11 +4,30 @@
   "description": "A reference implementation of a list ordering system like JIRA's Lexorank algorithm",
   "author": "kvandake",
   "license": "MIT",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "keywords": [
+    "LexoRank",
+    "JIRA"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kvandake/lexoRank"
+  },
+  "bugs": {
+    "url": "https://github.com/kvandake/lexoRank/issues"
+  },
+  "homepage": "https://github.com/kvandake/lexoRank",
   "scripts": {
     "build": "tsc",
     "test": "jest",
     "format": "prettier --write \"src/**/*.ts\" \"src/**/*.js\"",
-    "lint": "tslint -p tsconfig.json"
+    "lint": "tslint -p tsconfig.json",
+    "prepare": "yarn run build",
+    "prepublishOnly": "yarn test && yarn run lint",
+    "preversion": "yarn run lint",
+    "version": "yarn run format && git add -A src",
+    "postversion": "git push && git push --tags"
   },
   "devDependencies": {
     "@types/jest": "^24.0.15",
@@ -18,6 +37,10 @@
     "ts-jest": "^24.0.2",
     "tslint": "^5.18.0",
     "tslint-config-prettier": "^1.18.0",
-    "typescript": "^3.5.3"
-  }
+    "typescript": "^3.5.3",
+    "yarn": "^1.17.3"
+  },
+  "files": [
+    "lib/**/*"
+  ]
 }

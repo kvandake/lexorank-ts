@@ -1,0 +1,6 @@
+src
+__tests__
+jest.config.js
+tsconfig.json
+tslint.json
+.prettierrc
