@@ -1,8 +1,8 @@
-import LexoInteger from './lexoInteger';
-import { ILexoNumeralSystem } from './numeralSystems/lexoNumeralSystem';
-import StringBuilder from './utils/stringBuilder';
+import { LexoInteger } from './lexoInteger';
+import { ILexoNumeralSystem } from '../numeralSystems';
+import StringBuilder from '../utils/stringBuilder';
 
-class LexoDecimal {
+export class LexoDecimal {
   public static half(sys: ILexoNumeralSystem): LexoDecimal {
     const mid: number = (sys.getBase() / 2) | 0;
     return LexoDecimal.make(LexoInteger.make(sys, 1, [mid]), 1);
@@ -40,6 +40,7 @@ class LexoDecimal {
     const newSig = sig - zeroCount;
     return new LexoDecimal(newInteger, newSig);
   }
+
   private readonly mag: LexoInteger;
   private readonly sig: number;
 
@@ -206,5 +207,3 @@ class LexoDecimal {
     return this.format();
   }
 }
-
-export default LexoDecimal;

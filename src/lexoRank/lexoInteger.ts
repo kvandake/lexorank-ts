@@ -1,8 +1,8 @@
 import { lexoHelper } from './lexoHelper';
-import { ILexoNumeralSystem } from './numeralSystems/lexoNumeralSystem';
-import StringBuilder from './utils/stringBuilder';
+import { ILexoNumeralSystem } from '../numeralSystems';
+import StringBuilder from '../utils/stringBuilder';
 
-class LexoInteger {
+export class LexoInteger {
   public static parse(strFull: string, system: ILexoNumeralSystem): LexoInteger {
     let str = strFull;
     let sign = 1;
@@ -50,6 +50,7 @@ class LexoInteger {
     lexoHelper.arrayCopy(mag, 0, nmag, 0, actualLength);
     return new LexoInteger(sys, sign, nmag);
   }
+
   private static ZERO_MAG = [0];
   private static ONE_MAG = [1];
   private static NEGATIVE_SIGN = -1;
@@ -368,5 +369,3 @@ class LexoInteger {
     }
   }
 }
-
-export default LexoInteger;

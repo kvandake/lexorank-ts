@@ -1,9 +1,9 @@
-import LexoDecimal from './lexoDecimal';
+import { LexoDecimal } from './lexoDecimal';
 import LexoRankBucket from './lexoRankBucket';
-import LexoNumeralSystem36 from './numeralSystems/lexoNumeralSystem36';
-import StringBuilder from './utils/stringBuilder';
+import StringBuilder from '../utils/stringBuilder';
+import { LexoNumeralSystem36 } from '../numeralSystems';
 
-class LexoRank {
+export class LexoRank {
   public static get NUMERAL_SYSTEM() {
     if (!this._NUMERAL_SYSTEM) {
       this._NUMERAL_SYSTEM = new LexoNumeralSystem36();
@@ -298,13 +298,13 @@ class LexoRank {
     if (cmp === 0) {
       throw new Error(
         'Try to rank between issues with same rank this=' +
-          this +
-          ' other=' +
-          other +
-          ' this.decimal=' +
-          this.decimal +
-          ' other.decimal=' +
-          other.decimal,
+        this +
+        ' other=' +
+        other +
+        ' this.decimal=' +
+        this.decimal +
+        ' other.decimal=' +
+        other.decimal,
       );
     }
 
@@ -367,5 +367,3 @@ class LexoRank {
     return this.value.localeCompare(other.value);
   }
 }
-
-export default LexoRank;

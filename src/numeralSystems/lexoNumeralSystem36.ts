@@ -1,6 +1,6 @@
 import { ILexoNumeralSystem } from './lexoNumeralSystem';
 
-class LexoNumeralSystem36 implements ILexoNumeralSystem {
+export class LexoNumeralSystem36 implements ILexoNumeralSystem {
   private DIGITS = '0123456789abcdefghijklmnopqrstuvwxyz'.split('');
 
   public getBase(): number {
@@ -35,5 +35,3 @@ class LexoNumeralSystem36 implements ILexoNumeralSystem {
     return this.DIGITS[digit];
   }
 }
-
-export default LexoNumeralSystem36;

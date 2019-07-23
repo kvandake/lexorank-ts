@@ -1,5 +1,5 @@
-import LexoInteger from './lexoInteger';
-import LexoRank from './lexoRank';
+import { LexoInteger } from './lexoInteger';
+import { LexoRank } from './lexoRank';
 
 class LexoRankBucket {
   public static get BUCKET_0(): LexoRankBucket {
@@ -9,6 +9,7 @@ class LexoRankBucket {
 
     return this._BUCKET_0;
   }
+
   private static get BUCKET_1(): LexoRankBucket {
     if (!this._BUCKET_1) {
       this._BUCKET_1 = new LexoRankBucket('1');
@@ -16,6 +17,7 @@ class LexoRankBucket {
 
     return this._BUCKET_1;
   }
+
   private static get BUCKET_2(): LexoRankBucket {
     if (!this._BUCKET_2) {
       this._BUCKET_2 = new LexoRankBucket('2');
@@ -23,6 +25,7 @@ class LexoRankBucket {
 
     return this._BUCKET_2;
   }
+
   private static get VALUES(): LexoRankBucket[] {
     if (!this._VALUES) {
       this._VALUES = [LexoRankBucket.BUCKET_0, LexoRankBucket.BUCKET_1, LexoRankBucket.BUCKET_2];

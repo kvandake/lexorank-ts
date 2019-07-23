@@ -1,6 +1,6 @@
 import { ILexoNumeralSystem } from './lexoNumeralSystem';
 
-class LexoNumeralSystem10 implements ILexoNumeralSystem {
+export class LexoNumeralSystem10 implements ILexoNumeralSystem {
   public getBase(): number {
     return 10;
   }
@@ -29,5 +29,3 @@ class LexoNumeralSystem10 implements ILexoNumeralSystem {
     return String.fromCharCode(digit + 48);
   }
 }
-
-export default LexoNumeralSystem10;
