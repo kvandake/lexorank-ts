@@ -12,12 +12,12 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/kvandake/lexoRank"
+    "url": "https://github.com/kvandake/lexorank-js"
   },
   "bugs": {
-    "url": "https://github.com/kvandake/lexoRank/issues"
+    "url": "https://github.com/kvandake/lexorank-js/issues"
   },
-  "homepage": "https://github.com/kvandake/lexoRank",
+  "homepage": "https://github.com/kvandake/lexorank-js",
   "scripts": {
     "build": "tsc",
     "test": "jest",
