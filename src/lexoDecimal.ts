@@ -1,19 +1,10 @@
 import LexoInteger from './lexoInteger';
-import {ILexoNumeralSystem} from './lexoNumeralSystem';
-import StringBuilder from "./utils/stringBuilder";
+import { ILexoNumeralSystem } from './numeralSystems/lexoNumeralSystem';
+import StringBuilder from './utils/stringBuilder';
 
 class LexoDecimal {
-
-  private readonly mag: LexoInteger;
-  private readonly sig: number;
-
-  private constructor(mag: LexoInteger, sig: number) {
-    this.mag = mag;
-    this.sig = sig;
-  }
-
   public static half(sys: ILexoNumeralSystem): LexoDecimal {
-    let mid: number = (sys.getBase() / 2 | 0);
+    const mid: number = (sys.getBase() / 2) | 0;
     return LexoDecimal.make(LexoInteger.make(sys, 1, [mid]), 1);
   }
 
@@ -48,6 +39,13 @@ class LexoDecimal {
     const newInteger = integer.shiftRight(zeroCount);
     const newSig = sig - zeroCount;
     return new LexoDecimal(newInteger, newSig);
+  }
+  private readonly mag: LexoInteger;
+  private readonly sig: number;
+
+  private constructor(mag: LexoInteger, sig: number) {
+    this.mag = mag;
+    this.sig = sig;
   }
 
   public getSystem(): ILexoNumeralSystem {
@@ -101,7 +99,7 @@ class LexoDecimal {
       return this.mag;
     }
 
-    let floor = this.floor();
+    const floor = this.floor();
     return floor.add(LexoInteger.one(floor.getSystem()));
   }
 
@@ -132,7 +130,7 @@ class LexoDecimal {
       nsig = 0;
     }
 
-    let diff = this.sig - nsig;
+    const diff = this.sig - nsig;
     let nmag = this.mag.shiftRight(diff);
     if (ceiling) {
       nmag = nmag.add(LexoInteger.one(nmag.getSystem()));
@@ -162,15 +160,14 @@ class LexoDecimal {
 
   public format(): string {
     const intStr = this.mag.format();
-    if (this.sig == 0) {
+    if (this.sig === 0) {
       return intStr;
     }
 
     const sb = new StringBuilder(intStr);
     const head = sb[0];
     const specialHead =
-      head === this.mag.getSystem().getPositiveChar() ||
-      head === this.mag.getSystem().getNegativeChar();
+      head === this.mag.getSystem().getPositiveChar() || head === this.mag.getSystem().getNegativeChar();
 
     if (specialHead) {
       sb.remove(0, 1);
@@ -182,7 +179,7 @@ class LexoDecimal {
 
     sb.insert(sb.length - this.sig, this.mag.getSystem().getRadixPointChar());
 
-    if (sb.length - this.sig == 0) {
+    if (sb.length - this.sig === 0) {
       sb.insert(0, this.mag.getSystem().toChar(0));
     }
 

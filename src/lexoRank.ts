@@ -1,11 +1,9 @@
 import LexoDecimal from './lexoDecimal';
-import {LexoNumeralSystem36} from './lexoNumeralSystem';
 import LexoRankBucket from './lexoRankBucket';
-import StringBuilder from "./utils/stringBuilder";
+import LexoNumeralSystem36 from './numeralSystems/lexoNumeralSystem36';
+import StringBuilder from './utils/stringBuilder';
 
 class LexoRank {
-
-  private static _NUMERAL_SYSTEM;
   public static get NUMERAL_SYSTEM() {
     if (!this._NUMERAL_SYSTEM) {
       this._NUMERAL_SYSTEM = new LexoNumeralSystem36();
@@ -13,7 +11,6 @@ class LexoRank {
     return this._NUMERAL_SYSTEM;
   }
 
-  private static _ZERO_DECIMAL;
   private static get ZERO_DECIMAL(): LexoDecimal {
     if (!this._ZERO_DECIMAL) {
       this._ZERO_DECIMAL = LexoDecimal.parse('0', LexoRank.NUMERAL_SYSTEM);
@@ -22,7 +19,6 @@ class LexoRank {
     return this._ZERO_DECIMAL;
   }
 
-  private static _ONE_DECIMAL;
   private static get ONE_DECIMAL(): LexoDecimal {
     if (!this._ONE_DECIMAL) {
       this._ONE_DECIMAL = LexoDecimal.parse('1', LexoRank.NUMERAL_SYSTEM);
@@ -31,7 +27,6 @@ class LexoRank {
     return this._ONE_DECIMAL;
   }
 
-  private static _EIGHT_DECIMAL;
   private static get EIGHT_DECIMAL(): LexoDecimal {
     if (!this._EIGHT_DECIMAL) {
       this._EIGHT_DECIMAL = LexoDecimal.parse('8', LexoRank.NUMERAL_SYSTEM);
@@ -40,7 +35,6 @@ class LexoRank {
     return this._EIGHT_DECIMAL;
   }
 
-  private static _MIN_DECIMAL;
   private static get MIN_DECIMAL(): LexoDecimal {
     if (!this._MIN_DECIMAL) {
       this._MIN_DECIMAL = LexoRank.ZERO_DECIMAL;
@@ -49,7 +43,6 @@ class LexoRank {
     return this._MIN_DECIMAL;
   }
 
-  private static _MAX_DECIMAL;
   private static get MAX_DECIMAL(): LexoDecimal {
     if (!this._MAX_DECIMAL) {
       this._MAX_DECIMAL = LexoDecimal.parse('1000000', LexoRank.NUMERAL_SYSTEM).subtract(LexoRank.ONE_DECIMAL);
@@ -58,7 +51,6 @@ class LexoRank {
     return this._MAX_DECIMAL;
   }
 
-  private static _MID_DECIMAL;
   private static get MID_DECIMAL(): LexoDecimal {
     if (!this._MID_DECIMAL) {
       this._MID_DECIMAL = LexoRank.between(LexoRank.MIN_DECIMAL, LexoRank.MAX_DECIMAL);
@@ -67,7 +59,6 @@ class LexoRank {
     return this._MID_DECIMAL;
   }
 
-  private static _INITIAL_MIN_DECIMAL;
   private static get INITIAL_MIN_DECIMAL(): LexoDecimal {
     if (!this._INITIAL_MIN_DECIMAL) {
       this._INITIAL_MIN_DECIMAL = LexoDecimal.parse('100000', LexoRank.NUMERAL_SYSTEM);
@@ -76,23 +67,15 @@ class LexoRank {
     return this._INITIAL_MIN_DECIMAL;
   }
 
-  private static _INITIAL_MAX_DECIMAL;
   private static get INITIAL_MAX_DECIMAL(): LexoDecimal {
     if (!this._INITIAL_MAX_DECIMAL) {
-      this._INITIAL_MAX_DECIMAL = LexoDecimal.parse(LexoRank.NUMERAL_SYSTEM.toChar(LexoRank.NUMERAL_SYSTEM.getBase() - 2) + '00000', LexoRank.NUMERAL_SYSTEM);
+      this._INITIAL_MAX_DECIMAL = LexoDecimal.parse(
+        LexoRank.NUMERAL_SYSTEM.toChar(LexoRank.NUMERAL_SYSTEM.getBase() - 2) + '00000',
+        LexoRank.NUMERAL_SYSTEM,
+      );
     }
 
     return this._INITIAL_MAX_DECIMAL;
-  }
-
-  private readonly value: string;
-  private readonly bucket: LexoRankBucket;
-  private readonly decimal: LexoDecimal;
-
-  public constructor(bucket: LexoRankBucket, decimal: LexoDecimal) {
-    this.value = bucket.format() + '|' + LexoRank.formatDecimal(decimal);
-    this.bucket = bucket;
-    this.decimal = decimal;
   }
 
   public static min(): LexoRank {
@@ -112,52 +95,6 @@ class LexoRank {
     return bucket === LexoRankBucket.BUCKET_0
       ? LexoRank.from(bucket, LexoRank.INITIAL_MIN_DECIMAL)
       : LexoRank.from(bucket, LexoRank.INITIAL_MAX_DECIMAL);
-  }
-
-  public genPrev(): LexoRank {
-    if (this.isMax()) {
-      return new LexoRank(this.bucket, LexoRank.INITIAL_MAX_DECIMAL);
-    }
-
-    let floorInteger = this.decimal.floor();
-    let floorDecimal = LexoDecimal.from(floorInteger);
-    let nextDecimal = floorDecimal.subtract(LexoRank.EIGHT_DECIMAL);
-    if (nextDecimal.compareTo(LexoRank.MIN_DECIMAL) <= 0) {
-      nextDecimal = LexoRank.between(LexoRank.MIN_DECIMAL, this.decimal);
-    }
-
-    return new LexoRank(this.bucket, nextDecimal);
-  }
-
-  public genNext(): LexoRank {
-    if (this.isMin()) {
-      return new LexoRank(this.bucket, LexoRank.INITIAL_MIN_DECIMAL);
-    }
-    let ceilInteger = this.decimal.ceil();
-    let ceilDecimal = LexoDecimal.from(ceilInteger);
-    let nextDecimal = ceilDecimal.add(LexoRank.EIGHT_DECIMAL);
-    if (nextDecimal.compareTo(LexoRank.MAX_DECIMAL) >= 0) {
-      nextDecimal = LexoRank.between(this.decimal, LexoRank.MAX_DECIMAL);
-    }
-
-    return new LexoRank(this.bucket, nextDecimal);
-  }
-
-  public between(other: LexoRank): LexoRank {
-    if (!this.bucket.equals(other.bucket)) {
-      throw new Error('Between works only within the same bucket');
-    }
-
-    let cmp = this.decimal.compareTo(other.decimal);
-    if (cmp > 0) {
-      return new LexoRank(this.bucket, LexoRank.between(other.decimal, this.decimal));
-    }
-
-    if (cmp === 0) {
-      throw new Error('Try to rank between issues with same rank this=' + this + ' other=' + other + ' this.decimal=' + this.decimal + ' other.decimal=' + other.decimal);
-    }
-
-    return new LexoRank(this.bucket, LexoRank.between(this.decimal, other.decimal));
   }
 
   public static between(oLeft: LexoDecimal, oRight: LexoDecimal): LexoDecimal {
@@ -219,8 +156,46 @@ class LexoRank {
     return mid;
   }
 
-  private static middleInternal(lbound: LexoDecimal, rbound: LexoDecimal, left: LexoDecimal, right: LexoDecimal): LexoDecimal {
-    let mid = LexoRank.mid(left, right);
+  public static parse(str: string): LexoRank {
+    const parts = str.split('|');
+    const bucket = LexoRankBucket.from(parts[0]);
+    const decimal = LexoDecimal.parse(parts[1], LexoRank.NUMERAL_SYSTEM);
+    return new LexoRank(bucket, decimal);
+  }
+
+  public static from(bucket: LexoRankBucket, decimal: LexoDecimal): LexoRank {
+    if (decimal.getSystem().getBase() !== LexoRank.NUMERAL_SYSTEM.getBase()) {
+      throw new Error('Expected different system');
+    }
+
+    return new LexoRank(bucket, decimal);
+  }
+
+  private static _NUMERAL_SYSTEM;
+
+  private static _ZERO_DECIMAL;
+
+  private static _ONE_DECIMAL;
+
+  private static _EIGHT_DECIMAL;
+
+  private static _MIN_DECIMAL;
+
+  private static _MAX_DECIMAL;
+
+  private static _MID_DECIMAL;
+
+  private static _INITIAL_MIN_DECIMAL;
+
+  private static _INITIAL_MAX_DECIMAL;
+
+  private static middleInternal(
+    lbound: LexoDecimal,
+    rbound: LexoDecimal,
+    left: LexoDecimal,
+    right: LexoDecimal,
+  ): LexoDecimal {
+    const mid = LexoRank.mid(left, right);
     return LexoRank.checkMid(lbound, rbound, mid);
   }
 
@@ -233,20 +208,107 @@ class LexoRank {
   }
 
   private static mid(left: LexoDecimal, right: LexoDecimal): LexoDecimal {
-    let sum = left.add(right);
-    let mid = sum.multiply(LexoDecimal.half(left.getSystem()));
-    let scale = left.getScale() > right.getScale() ? left.getScale() : right.getScale();
+    const sum = left.add(right);
+    const mid = sum.multiply(LexoDecimal.half(left.getSystem()));
+    const scale = left.getScale() > right.getScale() ? left.getScale() : right.getScale();
     if (mid.getScale() > scale) {
-      let roundDown = mid.setScale(scale, false);
+      const roundDown = mid.setScale(scale, false);
       if (roundDown.compareTo(left) > 0) {
         return roundDown;
       }
-      let roundUp = mid.setScale(scale, true);
+      const roundUp = mid.setScale(scale, true);
       if (roundUp.compareTo(right) < 0) {
         return roundUp;
       }
     }
     return mid;
+  }
+
+  private static formatDecimal(decimal: LexoDecimal): string {
+    const formatVal = decimal.format();
+    const val = new StringBuilder(formatVal);
+    let partialIndex = formatVal.indexOf(LexoRank.NUMERAL_SYSTEM.getRadixPointChar());
+    const zero = LexoRank.NUMERAL_SYSTEM.toChar(0);
+    if (partialIndex < 0) {
+      partialIndex = formatVal.length;
+      val.append(LexoRank.NUMERAL_SYSTEM.getRadixPointChar());
+    }
+
+    while (partialIndex < 6) {
+      val.insert(0, zero);
+      ++partialIndex;
+    }
+
+    while (val[val.length - 1] === zero) {
+      val.length = val.length - 1;
+    }
+
+    return val.toString();
+  }
+
+  private readonly value: string;
+  private readonly bucket: LexoRankBucket;
+  private readonly decimal: LexoDecimal;
+
+  public constructor(bucket: LexoRankBucket, decimal: LexoDecimal) {
+    this.value = bucket.format() + '|' + LexoRank.formatDecimal(decimal);
+    this.bucket = bucket;
+    this.decimal = decimal;
+  }
+
+  public genPrev(): LexoRank {
+    if (this.isMax()) {
+      return new LexoRank(this.bucket, LexoRank.INITIAL_MAX_DECIMAL);
+    }
+
+    const floorInteger = this.decimal.floor();
+    const floorDecimal = LexoDecimal.from(floorInteger);
+    let nextDecimal = floorDecimal.subtract(LexoRank.EIGHT_DECIMAL);
+    if (nextDecimal.compareTo(LexoRank.MIN_DECIMAL) <= 0) {
+      nextDecimal = LexoRank.between(LexoRank.MIN_DECIMAL, this.decimal);
+    }
+
+    return new LexoRank(this.bucket, nextDecimal);
+  }
+
+  public genNext(): LexoRank {
+    if (this.isMin()) {
+      return new LexoRank(this.bucket, LexoRank.INITIAL_MIN_DECIMAL);
+    }
+    const ceilInteger = this.decimal.ceil();
+    const ceilDecimal = LexoDecimal.from(ceilInteger);
+    let nextDecimal = ceilDecimal.add(LexoRank.EIGHT_DECIMAL);
+    if (nextDecimal.compareTo(LexoRank.MAX_DECIMAL) >= 0) {
+      nextDecimal = LexoRank.between(this.decimal, LexoRank.MAX_DECIMAL);
+    }
+
+    return new LexoRank(this.bucket, nextDecimal);
+  }
+
+  public between(other: LexoRank): LexoRank {
+    if (!this.bucket.equals(other.bucket)) {
+      throw new Error('Between works only within the same bucket');
+    }
+
+    const cmp = this.decimal.compareTo(other.decimal);
+    if (cmp > 0) {
+      return new LexoRank(this.bucket, LexoRank.between(other.decimal, this.decimal));
+    }
+
+    if (cmp === 0) {
+      throw new Error(
+        'Try to rank between issues with same rank this=' +
+          this +
+          ' other=' +
+          other +
+          ' this.decimal=' +
+          this.decimal +
+          ' other.decimal=' +
+          other.decimal,
+      );
+    }
+
+    return new LexoRank(this.bucket, LexoRank.between(this.decimal, other.decimal));
   }
 
   public getBucket(): LexoRankBucket {
@@ -275,43 +337,6 @@ class LexoRank {
 
   public format(): string {
     return this.value;
-  }
-
-  private static formatDecimal(decimal: LexoDecimal): string {
-    let formatVal = decimal.format();
-    const val = new StringBuilder(formatVal);
-    let partialIndex = formatVal.indexOf(LexoRank.NUMERAL_SYSTEM.getRadixPointChar());
-    let zero = LexoRank.NUMERAL_SYSTEM.toChar(0);
-    if (partialIndex < 0) {
-      partialIndex = formatVal.length;
-      val.append(LexoRank.NUMERAL_SYSTEM.getRadixPointChar());
-    }
-
-    while (partialIndex < 6) {
-      val.insert(0, zero);
-      ++partialIndex;
-    }
-
-    while (val[val.length - 1] == zero) {
-      val.length = val.length - 1;
-    }
-
-    return val.toString();
-  }
-
-  public static parse(str: string): LexoRank {
-    const parts = str.split('|');
-    const bucket = LexoRankBucket.from(parts[0]);
-    const decimal = LexoDecimal.parse(parts[1], LexoRank.NUMERAL_SYSTEM);
-    return new LexoRank(bucket, decimal);
-  }
-
-  public static from(bucket: LexoRankBucket, decimal: LexoDecimal): LexoRank {
-    if (decimal.getSystem().getBase() !== LexoRank.NUMERAL_SYSTEM.getBase()) {
-      throw new Error('Expected different system');
-    }
-
-    return new LexoRank(bucket, decimal);
   }
 
   public equals(other: LexoRank): boolean {

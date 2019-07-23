@@ -5,6 +5,7 @@
     "declaration": true,
     "outDir": "./lib",
     "strict": true,
+    "rootDir": "./src",
     "noImplicitAny": false
   },
   "include": ["src"],

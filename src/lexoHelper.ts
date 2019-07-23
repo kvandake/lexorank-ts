@@ -1,8 +1,8 @@
 export const lexoHelper = {
-  arrayCopy
+  arrayCopy,
 };
 
-function arrayCopy( sourceArray, sourceIndex, destinationArray, destinationIndex, length ){
+function arrayCopy(sourceArray, sourceIndex, destinationArray, destinationIndex, length) {
   let destination = destinationIndex;
   const finalLength = sourceIndex + length;
   for (let i = sourceIndex; i < finalLength; i++) {
