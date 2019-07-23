@@ -298,13 +298,13 @@ export class LexoRank {
     if (cmp === 0) {
       throw new Error(
         'Try to rank between issues with same rank this=' +
-        this +
-        ' other=' +
-        other +
-        ' this.decimal=' +
-        this.decimal +
-        ' other.decimal=' +
-        other.decimal,
+          this +
+          ' other=' +
+          other +
+          ' this.decimal=' +
+          this.decimal +
+          ' other.decimal=' +
+          other.decimal,
       );
     }
 

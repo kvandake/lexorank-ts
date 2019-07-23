@@ -1,6 +1,6 @@
 {
   "name": "lexorank",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A reference implementation of a list ordering system like JIRA's Lexorank algorithm",
   "author": "kvandake",
   "license": "MIT",
