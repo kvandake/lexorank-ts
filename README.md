@@ -19,7 +19,7 @@ npm yarn add lexorank
 
 
 ```typescript
-import LexoRank from "lexoRank";
+import {LexoRank} from "lexorank";
 
 // min
 const minLexoRank = LexoRank.min();
@@ -34,7 +34,7 @@ const parsedLexoRank = LexoRank.parse('0|0i0000:');
 ### Public methods
 
 ```typescript
-import {LexoRank} from "lexoRank";
+import {LexoRank} from "lexorank";
 
 // any lexoRank
 const lexoRank = LexoRank.middle();
@@ -53,6 +53,8 @@ const lexoRankStr = lexoRank.toString();
 
 LexRank calculation based on existing LexoRanks.
 ```typescript
+import {LexoRank} from "lexorank";
+
 // any lexorank
 const any1LexoRank = LexoRank.min();
 // another lexorank
