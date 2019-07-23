@@ -1,6 +1,8 @@
 # LexoRank on Typescript
 A reference implementation of a list ordering system like [JIRA's Lexorank algorithm](https://www.youtube.com/watch?v=OjQv9xMoFbg).
 
+[![npm version](https://badge.fury.io/js/lexorank.svg)](https://badge.fury.io/js/lexorank)
+
 ## Getting Started
 
 Npm
