@@ -12,7 +12,7 @@ npm install lexorank
 
 Yarn
 ```sh
-npm yarn add lexorank
+yarn add lexorank
 ```
 
 ## Using
