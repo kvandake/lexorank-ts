@@ -95,8 +95,8 @@ export class LexoInteger {
 
   private static multiply(sys: ILexoNumeralSystem, l: number[], r: number[]): number[] {
     const result = new Array(l.length + r.length).fill(0);
-    for (let li: number = 0; li < l.length; ++li) {
-      for (let ri: number = 0; ri < r.length; ++ri) {
+    for (let li = 0; li < l.length; ++li) {
+      for (let ri = 0; ri < r.length; ++ri) {
         const resultIndex = li + ri;
         for (
           result[resultIndex] += l[li] * r[ri];
@@ -243,7 +243,7 @@ export class LexoInteger {
     return this.isZero() ? this : LexoInteger.make(this.sys, this.sign === 1 ? -1 : 1, this.mag);
   }
 
-  public shiftLeft(times: number = 1): LexoInteger {
+  public shiftLeft(times = 1): LexoInteger {
     if (times === 0) {
       return this;
     }
@@ -257,7 +257,7 @@ export class LexoInteger {
     return LexoInteger.make(this.sys, this.sign, nmag);
   }
 
-  public shiftRight(times: number = 1): LexoInteger {
+  public shiftRight(times = 1): LexoInteger {
     if (this.mag.length - times <= 0) {
       return LexoInteger.zero(this.sys);
     }

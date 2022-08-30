@@ -1,7 +1,7 @@
 class StringBuilder {
   private str: string;
 
-  constructor(str: string = '') {
+  constructor(str = '') {
     this.str = str;
   }
 

@@ -32,7 +32,7 @@ export class LexoDecimal {
     }
 
     let zeroCount = 0;
-    for (let i: number = 0; i < sig && integer.getMag(i) === 0; ++i) {
+    for (let i = 0; i < sig && integer.getMag(i) === 0; ++i) {
       ++zeroCount;
     }
 
@@ -109,7 +109,7 @@ export class LexoDecimal {
       return true;
     }
 
-    for (let i: number = 0; i < this.sig; ++i) {
+    for (let i = 0; i < this.sig; ++i) {
       if (this.mag.getMag(i) !== 0) {
         return false;
       }
@@ -122,7 +122,7 @@ export class LexoDecimal {
     return this.sig;
   }
 
-  public setScale(nsig: number, ceiling: boolean = false): LexoDecimal {
+  public setScale(nsig: number, ceiling = false): LexoDecimal {
     if (nsig >= this.sig) {
       return this;
     }
