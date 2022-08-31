@@ -15,6 +15,9 @@ Yarn
 yarn add lexorank
 ```
 
+## Storyboard
+[See examples](https://630e298cd63179cde4d8775c-bensuqejhp.chromatic.com/?path=/story/dnd-kit--dnd-kit-list-story)
+
 ## Using
 
 ### Static methods
