@@ -31,7 +31,7 @@ const minLexoRank = LexoRank.min();
 // max
 const maxLexoRank = LexoRank.max();
 // middle
-const maxLexoRank = LexoRank.middle();
+const middleLexoRank = LexoRank.middle();
 // parse
 const parsedLexoRank = LexoRank.parse('0|0i0000:');
 ```
